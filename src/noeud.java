@@ -1,4 +1,5 @@
 import java.util.*;
+// classe noeud servirant a créer l'arbre
 
 public class noeud {
 	private int frequence;
@@ -63,6 +64,7 @@ public class noeud {
 		this.codeb = codeb;
 	}
 	
+	//return vrai si le noeud est une feuille faux sinon
 	public boolean estFeuile() {
 		return(this.fdroit == null && this.fgauche == null);
 	}

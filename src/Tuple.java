@@ -2,7 +2,7 @@
 public class Tuple implements Comparable<Object>{
 	char caractere;
 	Integer frequence;
-	
+	// classe tuple qui sert a avoir dans un treeset le caractere et sa fréquence associé.
 	public Tuple (Integer f, char c) {
 		this.caractere = c;
 		this.frequence=f;
