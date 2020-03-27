@@ -1,5 +1,9 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -9,7 +13,7 @@ public class OpenFile  {
 	TreeSet<Tuple> tuples = new TreeSet<Tuple>();
 	ArrayList<Character> alphabet = new ArrayList<Character>();
 	ArrayList<Integer> frequence = new ArrayList<Integer>();
-	ArrayList<Integer> new_frequence = new ArrayList<Integer>();
+	ArrayList<Integer> newFrequence = new ArrayList<Integer>();
 	ArrayList<Character> new_alphabet = new ArrayList<Character>();
 	ArrayList<Integer> f3 = new ArrayList<Integer>();
 	ArrayList<Character> c3 = new ArrayList<Character>();
@@ -20,7 +24,7 @@ public class OpenFile  {
 		
 	}
 	
-	
+
 	public String getTxt() {
 		return txt;
 	}
@@ -41,7 +45,7 @@ public class OpenFile  {
 
 
 	public ArrayList<Integer> getNewFrequence() {
-		return new_frequence;
+		return newFrequence;
 	}
 	//ouverture du fichier texte .txt
 	public String open(String adresse) {
@@ -75,7 +79,7 @@ public class OpenFile  {
 					 	this.alphabet.add(str);
 					 	this.new_alphabet.add(str);
 					 	this.frequence.add(1);
-					 	this.new_frequence.add(1);
+					 	this.newFrequence.add(1);
 					 	this.c3.add(str);
 					 	this.f3.add(1);
 					} 
@@ -83,8 +87,8 @@ public class OpenFile  {
 					{
 					 	int rang = alphabet.indexOf(this.txt.charAt(i));
 					 	this.frequence.set(rang, this.frequence.get(rang)+1);
-					 	this.new_frequence.set(rang, this.new_frequence.get(rang)+1);
-					 	this.f3.set(rang, this.new_frequence.get(rang)+1);
+					 	this.newFrequence.set(rang, this.newFrequence.get(rang)+1);
+					 	this.f3.set(rang, this.newFrequence.get(rang)+1);
 					}		 						 
 			 }
 	}
@@ -118,8 +122,8 @@ public class OpenFile  {
 	}
 	// trie la liste de fréquence dans l'ordre croissant.
 	public ArrayList<Integer> ordFreq(){
-		Collections.sort(this.new_frequence);
-		return this.new_frequence;
+		Collections.sort(this.newFrequence);
+		return this.newFrequence;
 	}
 	
 	//création d'un treeset pour associé character et fréquence et etre trié par frequence et ascii
@@ -201,7 +205,60 @@ public class OpenFile  {
 	
 	}
 	
+	//crée le fichier _comp.bin avec les format demandé
+	public void writeFileAlice() {
+		try {
+			File monFichier = new File("Alice_comp.bin");
+			if(monFichier.exists()) {
+				System.out.println("Fichier Alice_comp.bin existe deja");
+			}else {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Alice_comp.bin")));
+				for (int i= 0; i<this.txt.length(); i++) {
+					char carac = this.txt.charAt(i);
+					for(char key : dico.keySet()) {
+						if(key == carac) {
+							writer.write(dico.get(key));
+						}
+					}
+				}
+			
+			writer.close();
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
+	// créer le fichier _freq.txt avec le format demandé
+	public void writeFileFreq() {
+		try {
+			File monFichier = new File("Alice_freq.txt");
+			if(monFichier.exists()) {
+				System.out.println("Fichier Alice_freq.txt existe deja");
+			}else {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Alice_freq.txt")));
+				writer.write(""+this.nbCarac() + "\n");
+				for (Tuple t: this.tuples) {
+					writer.write(""+t.caractere+" "+t.frequence+"\n");
+				}
+				writer.close();
+			}
+			
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// calcule le nombre de caractere que l'alphabet possede
+	public int nbCarac() {
+		int nbCarac =0;
+		for(int i =0; i<this.c3.size(); i++) {
+			nbCarac = nbCarac+1;
+		}
+		return nbCarac;
+	}
 
 	
 	
