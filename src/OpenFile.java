@@ -234,6 +234,7 @@ public class OpenFile  {
 	// créer le fichier _freq.txt avec le format demandé
 	public void writeFileFreq() {
 		try {
+			//String name = this.nomFichier(adresse); //adresse en param // ?
 			File monFichier = new File("Alice_freq.txt");
 			if(monFichier.exists()) {
 				System.out.println("Fichier Alice_freq.txt existe deja");
@@ -260,8 +261,11 @@ public class OpenFile  {
 		return nbCarac;
 	}
 
-	
-	
+	//renvoie le nom du fichier sans l'extension
+	public String nomFichier(String adresse) {
+		String nom =adresse.substring(0, adresse.indexOf("."));
+		return nom;
+	}
 	
 	
 	

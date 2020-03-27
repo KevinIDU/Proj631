@@ -24,9 +24,9 @@ public class main {
 		System.out.println(alice.defArbre());
 		System.out.println(alice.dico);
 		
-		alice.writeFileAlice();
-		alice.writeFileFreq();
-	
+		//alice.writeFileAlice();
+		//alice.writeFileFreq();
+		
 	}
 	
 
