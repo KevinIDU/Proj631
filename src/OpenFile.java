@@ -7,13 +7,13 @@ import java.util.*;
 public class OpenFile  {
 	String txt;
 	TreeSet<Tuple> tuples = new TreeSet<Tuple>();
+	ArrayList<node> noeud = new ArrayList<node>();
 	ArrayList<Character> alphabet = new ArrayList<Character>();
 	ArrayList<Integer> frequence = new ArrayList<Integer>();
-	ArrayList<Integer> new_frequence = new ArrayList<Integer>();
-	ArrayList<Character> new_alphabet = new ArrayList<Character>();
+	ArrayList<Integer> newFrequence = new ArrayList<Integer>();
+	ArrayList<Character> newAlphabet = new ArrayList<Character>();
 	ArrayList<Integer> f3 = new ArrayList<Integer>();
 	ArrayList<Character> c3 = new ArrayList<Character>();
-	ArrayList<noeud> Lnoeud = new ArrayList<noeud>();
 	
 	public OpenFile(String fichier) {
 		this.txt=this.open(fichier);
@@ -36,12 +36,12 @@ public class OpenFile  {
 	}
 
 	public ArrayList<Character> getNewAlphabet() {
-		return new_alphabet;
+		return newAlphabet;
 	}
 
 
 	public ArrayList<Integer> getNewFrequence() {
-		return new_frequence;
+		return newFrequence;
 	}
 
 	public String open(String adresse) {
@@ -72,9 +72,9 @@ public class OpenFile  {
 					{
 					 	Character str = this.txt.charAt(i);
 					 	this.alphabet.add(str);
-					 	this.new_alphabet.add(str);
+					 	this.newAlphabet.add(str);
 					 	this.frequence.add(1);
-					 	this.new_frequence.add(1);
+					 	this.newFrequence.add(1);
 					 	this.c3.add(str);
 					 	this.f3.add(1);
 					} 
@@ -82,8 +82,8 @@ public class OpenFile  {
 					{
 					 	int rang = alphabet.indexOf(this.txt.charAt(i));
 					 	this.frequence.set(rang, this.frequence.get(rang)+1);
-					 	this.new_frequence.set(rang, this.new_frequence.get(rang)+1);
-					 	this.f3.set(rang, this.new_frequence.get(rang)+1);
+					 	this.newFrequence.set(rang, this.newFrequence.get(rang)+1);
+					 	this.f3.set(rang, this.newFrequence.get(rang)+1);
 					}		 						 
 			 }
 	}
@@ -117,8 +117,8 @@ public class OpenFile  {
 	}
 	
 	public ArrayList<Integer> ordFreq(){
-		Collections.sort(this.new_frequence);
-		return this.new_frequence;
+		Collections.sort(this.newFrequence);
+		return this.newFrequence;
 	}
 	
 	public void defTreeSet() {
@@ -128,32 +128,23 @@ public class OpenFile  {
 			}
 	}
 	
-	public ArrayList<noeud> defNoeud(){
-		TreeSet<Tuple> tampon = (TreeSet<Tuple>)this.tuples.clone(); 
-		while(tampon.size()>0){
-			int f= tampon.first().frequence;
-			char c = tampon.first().caractere;
-			tampon.remove(tampon.first());
-			this.Lnoeud.add(new noeud(f,c,null,null,""));
+	public void defArbre() {
+		while(this.tuples.size()>1) {
+			Tuple min1 = this.tuples.first();
+			this.tuples.remove(this.tuples.first());
+			Tuple min2 = this.tuples.first();
+			this.tuples.remove(this.tuples.first());
+			
 		}
-		return this.Lnoeud;
 	}
 	
-	public noeud defArbre() {		
-		TreeSet<noeud> tampon = new TreeSet<noeud>();
-		for (noeud n: this.Lnoeud) {
-			tampon.add(n);
+	/*public HashMap dico(ArrayList<String> alph, ArrayList<Integer> freq) {
+		HashMap<String, Integer> liste = new HashMap<String, Integer>();
+		for (int i=0; i<alph.size(); i++) {
+			liste.put(alph.get(i), freq.get(i));
 		}
-		while(tampon.size()>1) {
-			noeud n1 = tampon.first();
-			tampon.remove(tampon.first());
-			noeud n2 = tampon.first();
-			tampon.remove(tampon.first());
-			tampon.add(new noeud(n1.getFrequence()+n2.getFrequence(),'£',n1,n2, ""));
-		}
-		return tampon.first();
-	}
-	
+		return liste;
+	*/
 
 		
 	

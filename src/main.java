@@ -20,11 +20,9 @@ public class main {
 		alphOrd = alice.ordAlph(alphOrd);
 		//dico = alice.dico(alphOrd, freqOrd);
 		alice.defTreeSet();
-		alice.defNoeud();
-		
 		System.out.println(alice.tuples);
-		System.out.println(alice.Lnoeud);
-		System.out.println(alice.defArbre());
+		
+		
 		//System.out.println(alphOrd.get(16));
 		//Collections.sort(alphOrd);
 		//System.out.println(alphOrd);
