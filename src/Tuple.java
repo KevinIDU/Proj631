@@ -2,12 +2,20 @@
 public class Tuple implements Comparable<Object>{
 	char caractere;
 	Integer frequence;
-	// classe tuple qui sert a avoir dans un treeset le caractere et sa fréquence associé.
+
+	/**
+	 * Constructeur de mes tuples.
+	 * @param f fréquence d'un caractère.
+	 * @param c caractère de l'alphabet.
+	 */
+	
 	public Tuple (Integer f, char c) {
 		this.caractere = c;
 		this.frequence=f;
 	}
-	
+	/**
+	 * Overide de compareTo pour ordonner mes tuples correctement selon l'aparition puis le cractère ascii.
+	 */
 	@Override
 	public int compareTo(Object o) {
 		if( o instanceof Tuple) {
@@ -33,6 +41,10 @@ public class Tuple implements Comparable<Object>{
 		return 0;
 	}	
 	
+	
+	/**
+	 * Définition du toString pour un meilleur affichage.
+	 */
 	public String toString() {
 		return "c:"+this.caractere +" "+"f:"+ this.frequence;
 	}

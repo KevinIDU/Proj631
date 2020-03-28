@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,31 +14,54 @@ public class OpenFile  {
 	TreeSet<Tuple> tuples = new TreeSet<Tuple>();
 	ArrayList<Character> alphabet = new ArrayList<Character>();
 	ArrayList<Integer> frequence = new ArrayList<Integer>();
+	
+	//*******************************
+	// Je créer une copie des listes alphabet et frequence parce que dans la suite je remove les elements dans alphabet et frequence 
+	//mais j'en est encore besoin après. Découvert de .clone() trop tard.
 	ArrayList<Integer> newFrequence = new ArrayList<Integer>();
 	ArrayList<Character> new_alphabet = new ArrayList<Character>();
 	ArrayList<Integer> f3 = new ArrayList<Integer>();
 	ArrayList<Character> c3 = new ArrayList<Character>();
+	//********************************
+	
 	ArrayList<noeud> Lnoeud = new ArrayList<noeud>();
 	HashMap<Character, String> dico = new HashMap<Character, String >();
+	
+	/**
+	 * Constructeur permttant d'ouvrir le fichier.
+	 * @param fichier qu'on veut ouvrir.
+	 * @see open
+	 */
 	public OpenFile(String fichier) {
 		this.txt=this.open(fichier);
 		
 	}
 	
-
+	/**
+	 * Getteur du texte.
+	 * @return Le texte qu'on étudie qui est considérer comme un string.
+	 */
 	public String getTxt() {
 		return txt;
 	}
 
-
+	/**
+	 * Getteur de l'alphabet qui compose le texte.
+	 * @return Une liste composé des caractères de l'alphabet du texte.
+	 * 
+	 */
 	public ArrayList<Character> getAlphabet() {
 		return alphabet;
 	}
 
-
+	/**
+	 * Getteur de la fréquence du texte.
+	 * @return Une lite d'entier qui est la fréquence d'apparition des caractères de notre alphabet.
+	 */
 	public ArrayList<Integer> getFrequence() {
 		return frequence;
 	}
+
 
 	public ArrayList<Character> getNewAlphabet() {
 		return new_alphabet;
@@ -47,7 +71,14 @@ public class OpenFile  {
 	public ArrayList<Integer> getNewFrequence() {
 		return newFrequence;
 	}
-	//ouverture du fichier texte .txt
+	
+	
+	/**
+	 * Méthode pour ouvrir un texte situé dans le répertoire du projet.
+	 * @param adresse est l'adresse en format .txt de notre texte.
+	 * @see OpenFile
+	 * @return le texte ouvert en String.
+	 */
 	public String open(String adresse) {
 		String texte = " ";
 		  try{
@@ -68,8 +99,12 @@ public class OpenFile  {
 		  return texte;
 		  
 	}
-	// création de 3fois la même liste parce que je l'écrase dans d'autre fonction.
-	// optimisation possible je pense avec le .clone()
+	
+	
+	/**
+	 * Méthode qui modifie les liste d'alphabet et de fréquence.
+	 * Détermine l'alphabet de notre texte et sa fréquence d'apparition.
+	 */
 	public void defAlphFreq() {
 		for (int i = 0; i<this.txt.length(); i++)
 			{
@@ -93,7 +128,12 @@ public class OpenFile  {
 			 }
 	}
 
-	// retourne la frequence minimum
+	
+	/**
+	 * Renvoie la fréquence minimal de notre liste de fréquence.
+	 * @see ordAlph
+	 * @return Une entier correspondant à la fréquence la plus petite.
+	 */
 	public int  minFreque() {
 		int res = this.frequence.get(0);
 		for(int j = 0; j<this.frequence.size(); j++){
@@ -104,7 +144,11 @@ public class OpenFile  {
 	}
 	
 
-	//retourne la liste de caracter ordonnée par la fréquence associé.
+	/**
+	 * Trie ma liste de caractere par apparition dans l'ordre croissant. Fonctionne en récursif.
+	 * @param alphOrd liste de caractere qui sera mon alphabet non trié.
+	 * @return Une liste de caractère.
+	 */
 	public ArrayList<Character> ordAlph(ArrayList<Character> alphOrd){
 		if (this.alphabet.isEmpty()) {
 			 return alphOrd;
@@ -120,32 +164,54 @@ public class OpenFile  {
 		}
 		return ordAlph(alphOrd);
 	}
-	// trie la liste de fréquence dans l'ordre croissant.
+	
+	
+	/**
+	 * Trie ma liste de fréquence dans l'ordre croissant
+	 * @return une liste d'entier
+	 */
 	public ArrayList<Integer> ordFreq(){
 		Collections.sort(this.newFrequence);
 		return this.newFrequence;
 	}
 	
-	//création d'un treeset pour associé character et fréquence et etre trié par frequence et ascii
+	
+	/**
+	 * Définition d'un TreeSet afin de lier un caractère et sa fréquence associé a l'aide de la classe tuple.
+	 * @see Tuple
+	 */
 	public void defTreeSet() {
 		for(int i =0; i<this.f3.size(); i++) {
 			Tuple t =new Tuple(this.f3.get(i),this.c3.get(i));
 			this.tuples.add(t);
 			}
 	}
-	//Création d'une liste de noeud ou chaque noeud à sa fréquence et son caractere associé et un code bianire  par défaut
+	
+	
+	/**
+	 * Création de ma liste de feuille.
+	 * @see noeud
+	 * @return Une liste de noeud.
+	 * Noeud = fréquence, caractere, fils gauche, fils droit, code binaire.
+	 */
 	public ArrayList<noeud> defNoeud(){
 		TreeSet<Tuple> tampon = (TreeSet<Tuple>)this.tuples.clone(); 
 		while(tampon.size()>0){
 			int f= tampon.first().frequence;
 			char c = tampon.first().caractere;
 			tampon.remove(tampon.first());
-			this.Lnoeud.add(new noeud(f,c,null,null,"")); // (fréquence, caractere, fils gauche, fils droit, code binaire)
+			this.Lnoeud.add(new noeud(f,c,null,null,"")); 
 		}
 		return this.Lnoeud;
 	}
-	//création de l'arbre qui est en faite un noeud avec des fils qui ont des fils etc.
-	// Problème : ajout dans tampon sans être retrié après : à modifier
+	
+	
+	
+	/**
+	 * Création de mon arbre a aprtir de ma liste de feuille.
+	 * @see defNoeud
+	 * @return Un noeud.
+	 */
 	public noeud defArbre() {	
 		ArrayList<noeud> tampon =(ArrayList<noeud>) Lnoeud.clone();
 		while(tampon.size()>1) {
@@ -160,7 +226,13 @@ public class OpenFile  {
 		}
 		return tampon.get(0);
 	}
-	// tri de ma liste de noeud, inspiré d'un tri à bulle trouvé sur internet 
+	
+	
+	/**
+	 * Trie a bulle (trouvé sur internet) me permettant de trier ma liste tampon par fréquence dans defArbre après l'ajout d'un noeud.
+	 * @see defArbre 
+	 * @param list qu'on souhaite trié.
+	 */
 	public void triNoeuds(ArrayList<noeud> list) {
 		for (int i= 1; i<list.size(); i++) {
 			int freq_now = list.get(i).getFrequence();
@@ -186,42 +258,70 @@ public class OpenFile  {
 			list.get(j).setCodeb(codebin_now);
 		}
 	}
-	// parcours en profondeur de mon arbre que je stock dans un hashmap
+	
+	
+	/**
+	 * Parcours en profondeur de mon arbre. 
+	 * @see defArbre
+	 * @param depart qui correspond a la racine de mon arbre obtenue avec defArbre.
+	 * @param codeBin à mettre à "" au départ pour la récursivité.
+	 */
 	public void parcourir(noeud depart, String codeBin){
 		
 		if (depart.estFeuile()) {
 			this.dico.put(depart.getCarac(),codeBin);
 		}
 		if (depart.getFgauche() != null) {
-			if (depart.getCodeb() =="") {
+			
 				this.parcourir(depart.getFgauche(), codeBin + "0");
-			} 
+			
 		}
 		if (depart.getFdroit()!= null) {
-			if(depart.getCodeb()=="") {
-				this.parcourir(depart.getFdroit(), codeBin + "1");
-			}
+			
+			this.parcourir(depart.getFdroit(), codeBin + "1");
+			
+			
 		}
 	
 	}
 	
-	//crée le fichier _comp.bin avec les format demandé
-	public void writeFileAlice() {
+	
+	/**
+	 * Céation du fichier nom_comp.bin.
+	 * Le fichier obtenue sera le texte compréssé.
+	 * On récuper dans un String ,ici chaine, tout les codes binaires.
+	 * On vérifie que chiane%8 soit égale a 0 pour faire les paquets d'octets.
+	 * Ensuite on ajoute dans une liste de String, ici listeOctet, les octets.
+	 * Puis on écrit dans le fichier ces octets convertie en integer puis en byte.
+	 * @param adresse du fichier a comprésser.
+	 */
+	public void writeFileTxt(String adresse) {
+		//chaine est un String avec tout les codes binaires 
+		String chaine = "";
+			for(int i = 0; i<this.txt.length(); i++) {
+				chaine = chaine + this.dico.get(this.txt.charAt(i));
+			}
+		while(chaine.length() %8 != 0) {
+			chaine = chaine +"0";
+		}
+		
+		ArrayList<String> listeOctet = new ArrayList<String>();
+		for(int i =8; i < chaine.length(); i=i+8 ) {
+			listeOctet.add(chaine.substring(i-8, i));
+		}
+		
 		try {
-			File monFichier = new File("Alice_comp.bin");
+			File monFichier = new File(nomFichier(adresse)+"_comp.bin");
 			if(monFichier.exists()) {
-				System.out.println("Fichier Alice_comp.bin existe deja");
+				System.out.println( monFichier + " existe deja");
 			}else {
-				BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Alice_comp.bin")));
-				for (int i= 0; i<this.txt.length(); i++) {
-					char carac = this.txt.charAt(i);
-					for(char key : dico.keySet()) {
-						if(key == carac) {
-							writer.write(dico.get(key));
-						}
-					}
+				BufferedWriter writer = new BufferedWriter(new FileWriter(new File(nomFichier(adresse)+"_comp.bin")));
+				for(String octet : listeOctet) {
+					int bit = Integer.parseInt(octet, 2);
+					writer.write((byte)bit);
 				}
 			
+				
 			writer.close();
 			}
 		}
@@ -231,15 +331,18 @@ public class OpenFile  {
 		
 	}
 	
-	// créer le fichier _freq.txt avec le format demandé
-	public void writeFileFreq() {
+	
+	/**
+	 * Création du fichier nom_freq.txt, qui sera un texte avec le nombre de caractère, chaque caractère et sa fréquence.
+	 * @param adresse du fichier.
+	 */
+	public void writeFileFreq(String adresse) {
 		try {
-			//String name = this.nomFichier(adresse); //adresse en param // ?
-			File monFichier = new File("Alice_freq.txt");
+			File monFichier = new File(nomFichier(adresse)+"_freq.txt");
 			if(monFichier.exists()) {
-				System.out.println("Fichier Alice_freq.txt existe deja");
+				System.out.println(monFichier +" existe deja");
 			}else {
-				BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Alice_freq.txt")));
+				BufferedWriter writer = new BufferedWriter(new FileWriter(new File(nomFichier(adresse)+"_freq.txt")));
 				writer.write(""+this.nbCarac() + "\n");
 				for (Tuple t: this.tuples) {
 					writer.write(""+t.caractere+" "+t.frequence+"\n");
@@ -252,7 +355,11 @@ public class OpenFile  {
 		}
 	}
 	
-	// calcule le nombre de caractere que l'alphabet possede
+	
+	/**
+	 * Calcule le nombre de caractère que l'alphabet possède.
+	 * @return Un entier.
+	 */
 	public int nbCarac() {
 		int nbCarac =0;
 		for(int i =0; i<this.c3.size(); i++) {
@@ -261,10 +368,49 @@ public class OpenFile  {
 		return nbCarac;
 	}
 
-	//renvoie le nom du fichier sans l'extension
+	
+	/**
+	 * Renvoie le nom du fichier sans l'extension.
+	 * @param adresse du fichier. 
+	 * @return Une chaine de caractère.
+	 */
 	public String nomFichier(String adresse) {
 		String nom =adresse.substring(0, adresse.indexOf("."));
 		return nom;
+	}
+
+	
+	/**
+	 * Renvoie le taux de compréssion du texte( 1 moins (taille finale/taille initiale)).
+	 * @param adrBin adresse du fichier final : .bin.
+	 * @param adrTxt adresse du fichier initial : .txt.
+	 * @return Un nombre décimal.
+	 */
+	public float compression(String adrBin, String adrTxt) {
+		File txt = new File(adrTxt);
+		File bin = new File(adrBin);
+		double txtBytes =  txt.length();
+		double binBytes =  bin.length();
+		return (float)(1 - (binBytes/txtBytes));
+ 				
+	}
+
+	
+	/**
+	 * Renvoie le nombbre moyen de bit par caractère. 
+	 * @return Un entier.
+	 */
+	public float moyBitCarac() {
+		int res = 0;
+		int nbCarac = this.nbCarac();
+		for (char key:dico.keySet()) {
+			int cpt = 0;
+			for(int i =0; i<dico.get(key).length(); i++) {
+				cpt = cpt +1;
+			}
+			res = res + cpt;
+		}
+		return res/nbCarac;
 	}
 	
 	
